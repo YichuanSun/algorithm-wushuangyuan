@@ -2,7 +2,7 @@
 #define N 10005
 using namespace std;
 
-int a[N][N],flag,n,m;
+int a[N][N],flag,n,m,used[N][N];
 pair<int,int> vm;
 stack<int> si,ans;
 
@@ -30,18 +30,23 @@ void dfs(int x,int y)   {
     if (x==n-1&&y==m-1) {flag=1;return;}
     //mov(x,y,op);    //检验是否可以这样移动
     if (x<0||x>=n||y<0||y>=m)   {return;}
+    if (used[x][y]==1)  {return;}
     if (a[x][y]==1) {return;}
     for (int i=8;i>=1;i--)  {
         if (i==1||i==3||i==5)   continue;
+        if (a[x][y]==1) continue;
+        used[x][y]=1;
         if (mov(x,y,i)) {
             si.push(i);
-            x+=vm.first;
-            y+=vm.second;
-            dfs(x,y);
+            //x+=vm.first;
+            //y+=vm.second;
+            dfs(x+vm.first,y+vm.second);
             if (flag)   return;
-            x-=vm.first;
-            y-=vm.second;
+            si.pop();
+            //x-=vm.first;
+            //y-=vm.second;
         }
+        used[x][y]=0;
     }
 }
 
